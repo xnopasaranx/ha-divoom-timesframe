@@ -1,0 +1,102 @@
+{
+  "title": "Divoom TimesFrame",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add TimesFrame device",
+        "description": "Choose how to add your Divoom TimesFrame.",
+        "menu_options": {
+          "scan": "Scan network",
+          "manual": "Enter IP address manually"
+        }
+      },
+      "scan": {
+        "title": "Select discovered device",
+        "description": "The following TimesFrame devices were found on your network.",
+        "data": {
+          "device": "Device"
+        }
+      },
+      "manual": {
+        "title": "Manual configuration",
+        "description": "Enter the IP address of your TimesFrame.",
+        "data": {
+          "host": "Host/IP address",
+          "port": "Port",
+          "name": "Name"
+        },
+        "error": {
+          "cannot_connect": "Failed to connect. Please check the IP and that the device is on.",
+          "no_devices_found": "No TimesFrame devices found on the network.",
+          "unknown": "Unexpected error."
+        }
+      },
+      "init": {
+        "title": "TimesFrame settings",
+        "description": "Change the IP address or port used to reach the device.",
+        "data": {
+          "host": "Host/IP address",
+          "port": "Port"
+        },
+        "error": {
+          "cannot_connect": "Failed to connect. Please check the IP and that the device is on.",
+          "wrong_device": "The device at this address does not match the configured device ID.",
+          "unknown": "Unexpected error."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Device is already configured."
+    }
+  },
+  "entity": {
+    "switch": {
+      "screen": {
+        "name": "Screen"
+      }
+    },
+    "number": {
+      "brightness": {
+        "name": "Brightness"
+      }
+    },
+    "select": {
+      "clock": {
+        "name": "Clock face"
+      }
+    },
+    "sensor": {
+      "device_info": {
+        "name": "Device info"
+      },
+      "clock_id": {
+        "name": "Clock ID"
+      }
+    },
+    "button": {
+      "reboot": {
+        "name": "Reboot"
+      }
+    }
+  },
+  "services": {
+    "send_danmaku": {
+      "name": "Send danmaku",
+      "description": "Send scrolling text to a Divoom TimesFrame screen.",
+      "fields": {
+        "device_id": {
+          "name": "Device ID",
+          "description": "The TimesFrame device ID."
+        },
+        "message": {
+          "name": "Message",
+          "description": "Text to scroll across the screen."
+        },
+        "color": {
+          "name": "Text color",
+          "description": "Hex color for the text."
+        }
+      }
+    }
+  }
+}

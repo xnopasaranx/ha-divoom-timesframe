@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Divoom TimesFrame Test UI</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --danger: #f87171;
+      --ok: #4ade80;
+      --warn: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    h1 { margin: 0 0 0.25rem; font-size: 1.6rem; }
+    .subtitle { color: var(--muted); margin-bottom: 1.5rem; }
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+    .panel {
+      background: var(--panel);
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.35rem; }
+    select, textarea, input, button {
+      width: 100%;
+      font: inherit;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      background: #0b1220;
+      color: var(--text);
+    }
+    select:focus, textarea:focus, input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    textarea { min-height: 160px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; resize: vertical; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+    .three-col { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; }
+    @media (max-width: 640px) { .three-col { grid-template-columns: 1fr; } }
+    button {
+      cursor: pointer;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    button:hover { filter: brightness(1.1); }
+    button.secondary {
+      background: #334155;
+      color: var(--text);
+    }
+    .status {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-family: ui-monospace, monospace;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .status.ok { background: rgba(74, 222, 128, 0.1); color: var(--ok); }
+    .status.err { background: rgba(248, 113, 113, 0.1); color: var(--danger); }
+    .hint { color: var(--muted); font-size: 0.8rem; margin-top: 0.4rem; }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 999px;
+      background: #334155;
+      color: var(--text);
+      margin-left: 0.5rem;
+    }
+    .tag.known { background: #065f46; color: #a7f3d0; }
+    .tag.inherited { background: #475569; color: #cbd5e1; }
+    .clock-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .clock-card {
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .clock-card:hover { border-color: var(--accent); }
+    .clock-card img { width: 100%; border-radius: 0.25rem; margin-bottom: 0.35rem; }
+    .clock-id { color: var(--muted); font-size: 0.7rem; }
+    .field-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    .field-table th, .field-table td {
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid #334155;
+    }
+    .field-table th { color: var(--muted); font-weight: 500; }
+    .mono { font-family: ui-monospace, monospace; }
+    .section-title { font-size: 0.9rem; font-weight: 600; margin: 1rem 0 0.4rem; }
+    .section-title:first-child { margin-top: 0; }
+    .warn { color: var(--warn); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Divoom TimesFrame Test UI</h1>
+    <p class="subtitle">Target: <span id="device-url">{{ device_url }}</span></p>
+
+    <div class="panel" style="margin-bottom:1rem">
+      <div class="section-title">Device settings</div>
+      <div class="three-col">
+        <div>
+          <label for="setting-ip">IP address</label>
+          <input id="setting-ip" type="text" placeholder="192.168.x.x">
+        </div>
+        <div>
+          <label for="setting-port">Port</label>
+          <input id="setting-port" type="number" value="9000">
+        </div>
+        <div>
+          <label for="setting-device-id">Device ID</label>
+          <input id="setting-device-id" type="number" placeholder="0">
+        </div>
+      </div>
+      <div class="row" style="margin-top:0.75rem">
+        <button onclick="saveSettings()">Save settings</button>
+        <button class="secondary" onclick="loadSettings()">Reload</button>
+      </div>
+      <p class="hint">Settings are stored in <code>app/config.json</code> and are not committed.</p>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <label for="category">Category</label>
+        <select id="category" onchange="onCategoryChange()">
+          <option value="" disabled selected>Choose a category…</option>
+          <option value="Channel">Channel</option>
+          <option value="Device">Device</option>
+          <option value="Danmaku">Danmaku</option>
+        </select>
+
+        <label for="command" style="margin-top:1rem">Command</label>
+        <select id="command" onchange="onCommandChange()" disabled>
+          <option value="" disabled selected>Choose a command…</option>
+        </select>
+
+        <p class="hint">
+          Select a command to see its purpose and parameter schema.
+          The JSON payload is merged with <code>{"Command":"…"}</code> before sending.
+        </p>
+
+        <label for="payload" style="margin-top:1rem">JSON payload</label>
+        <textarea id="payload">{}</textarea>
+
+        <div class="row" style="margin-top:0.75rem">
+          <button onclick="send()">Send command</button>
+          <button class="secondary" onclick="document.getElementById('payload').value='{}'">Reset payload</button>
+        </div>
+
+        <div class="section-title">Response</div>
+        <div id="status" class="status" style="display:none"></div>
+        <pre id="response" style="white-space:pre-wrap;word-break:break-word;">Send a command to see the result.</pre>
+      </div>
+
+      <div class="panel">
+        <div class="section-title" id="doc-title">Documentation</div>
+        <div id="doc-body">
+          <p class="hint">Select a command to see its purpose, request fields and response fields.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem">
+        <label style="margin:0">Cloud clock faces (click to copy ClockId into SetClockSelectId)</label>
+        <button class="secondary" style="width:auto;margin:0" onclick="loadClocks()">Load clocks</button>
+      </div>
+      <div id="clocks" class="clock-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const commands = {{ commands | tojson }};
+    const initialSettings = {{ settings | tojson }};
+    const categorySelect = document.getElementById('category');
+    const commandSelect = document.getElementById('command');
+    const payloadEl = document.getElementById('payload');
+    const docTitle = document.getElementById('doc-title');
+    const docBody = document.getElementById('doc-body');
+
+    function applySettingsToUI(settings) {
+      document.getElementById('setting-ip').value = settings.device_ip || '';
+      document.getElementById('setting-port').value = settings.device_port || 9000;
+      document.getElementById('setting-device-id').value = settings.device_id || '';
+      document.getElementById('device-url').textContent = settings.base_url || 'not configured';
+    }
+
+    async function loadSettings() {
+      try {
+        const res = await fetch('/api/settings');
+        const settings = await res.json();
+        applySettingsToUI(settings);
+      } catch (e) {
+        console.error('Failed to load settings', e);
+      }
+    }
+
+    async function saveSettings() {
+      const ip = document.getElementById('setting-ip').value.trim();
+      const port = parseInt(document.getElementById('setting-port').value, 10);
+      const deviceId = parseInt(document.getElementById('setting-device-id').value, 10);
+      if (!ip || !port) {
+        alert('IP and port are required');
+        return;
+      }
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ device_ip: ip, device_port: port, device_id: deviceId })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.error || 'Failed to save settings');
+          return;
+        }
+        applySettingsToUI(data);
+        location.reload();
+      } catch (e) {
+        alert('Error saving settings: ' + e.message);
+      }
+    }
+
+    applySettingsToUI(initialSettings);
+
+    function commandsByCategory(cat) {
+      return commands.filter(c => c.category === cat).sort((a, b) => a.command.localeCompare(b.command));
+    }
+
+    function onCategoryChange() {
+      const cat = categorySelect.value;
+      commandSelect.innerHTML = '<option value="" disabled selected>Choose a command…</option>';
+      const list = cat ? commandsByCategory(cat) : [];
+      list.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.command;
+        opt.textContent = c.command.split('/')[1];
+        commandSelect.appendChild(opt);
+      });
+      commandSelect.disabled = !list.length;
+      payloadEl.value = '{}';
+      docTitle.textContent = 'Documentation';
+      docBody.innerHTML = '<p class="hint">Select a command to see its purpose, request fields and response fields.</p>';
+    }
+
+    function renderFieldTable(fields, title, showInherited) {
+      if (!fields || !fields.length) return '';
+      const rows = fields.map(f => {
+        const inherited = f.inherited ? '<span class="tag inherited">inherited</span>' : '';
+        return `<tr><td class="mono">${f.json_name}${inherited}</td><td class="mono">${f.type}</td><td class="mono">${f.java_name}</td></tr>`;
+      }).join('');
+      return `
+        <div class="section-title">${title}</div>
+        <table class="field-table">
+          <thead><tr><th>JSON key</th><th>Type</th><th>Java field</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function onCommandChange() {
+      const cmd = commandSelect.value;
+      const info = commands.find(c => c.command === cmd);
+      if (!info) return;
+
+      payloadEl.value = JSON.stringify(info.template, null, 2);
+
+      let html = '';
+      html += `<p><strong>Purpose:</strong> ${info.purpose || 'Unknown'}</p>`;
+      if (info.request_class) {
+        html += `<p class="hint mono">Request class: ${info.request_class}</p>`;
+      } else {
+        html += `<p class="hint warn">No request class found in APK. The device may accept an empty payload or require parameters not yet mapped.</p>`;
+      }
+      if (info.response_class) {
+        html += `<p class="hint mono">Response class: ${info.response_class}</p>`;
+      }
+      html += renderFieldTable(info.own_fields && info.own_fields.length ? info.own_fields : info.request_fields, 'Request parameters', true);
+      if (info.own_fields && info.own_fields.length && info.request_fields.length > info.own_fields.length) {
+        const inherited = info.request_fields.filter(f => f.inherited);
+        html += renderFieldTable(inherited, 'Inherited/common parameters', true);
+      }
+      html += renderFieldTable(info.response_fields, 'Response fields', false);
+
+      docTitle.textContent = info.command;
+      docBody.innerHTML = html;
+    }
+
+    async function send() {
+      const command = commandSelect.value;
+      const raw = payloadEl.value;
+      const statusEl = document.getElementById('status');
+      const respEl = document.getElementById('response');
+
+      if (!command) {
+        statusEl.style.display = 'block';
+        statusEl.className = 'status err';
+        statusEl.textContent = 'Select a category and command first.';
+        return;
+      }
+
+      let payload;
+      try {
+        payload = JSON.parse(raw);
+      } catch (e) {
+        statusEl.style.display = 'block';
+        statusEl.className = 'status err';
+        statusEl.textContent = 'Invalid JSON in payload: ' + e.message;
+        return;
+      }
+
+      statusEl.style.display = 'block';
+      statusEl.className = '';
+      statusEl.textContent = 'Sending…';
+      respEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command, payload })
+        });
+        const data = await res.json();
+        statusEl.className = (res.ok && data.response && data.response.ReturnCode === 0) ? 'status ok' : 'status err';
+        statusEl.textContent = `HTTP ${res.status}`;
+        respEl.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        statusEl.className = 'status err';
+        statusEl.textContent = 'Network error: ' + e.message;
+      }
+    }
+
+    async function loadClocks() {
+      const grid = document.getElementById('clocks');
+      grid.innerHTML = '<div class="clock-card">Loading…</div>';
+      try {
+        const res = await fetch('/api/clocklist');
+        const data = await res.json();
+        grid.innerHTML = '';
+        if (!data.ClockList || !data.ClockList.length) {
+          grid.innerHTML = '<div class="clock-card">No clocks found</div>';
+          return;
+        }
+        data.ClockList.forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'clock-card';
+          card.title = `ClockId: ${c.ClockId}`;
+          card.innerHTML = `
+            <img src="https://f.divoom-gz.com/${c.ImagePixelId}" alt="" onerror="this.style.display='none'">
+            <div>${c.ClockName}</div>
+            <div class="clock-id">ID: ${c.ClockId}</div>
+          `;
+          card.onclick = () => {
+            categorySelect.value = 'Channel';
+            onCategoryChange();
+            commandSelect.value = 'Channel/SetClockSelectId';
+            onCommandChange();
+            const payload = JSON.parse(payloadEl.value);
+            payload.ClockId = c.ClockId;
+            payloadEl.value = JSON.stringify(payload, null, 2);
+          };
+          grid.appendChild(card);
+        });
+      } catch (e) {
+        grid.innerHTML = `<div class="clock-card">Error: ${e.message}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.xcodeproj
+.DS_Store
+
+# Reverse-engineering tools & large artifacts
+binaries/
+androguard.db*
+androguard.log
+*.apk
+*.tar.gz
+*.zip
+*.jar
+smali_out/
+divoom_decompiled/
+divoom_src/
+
+# App runtime config
+app/config.json
+
+# Temporary test scripts
+test_*.py

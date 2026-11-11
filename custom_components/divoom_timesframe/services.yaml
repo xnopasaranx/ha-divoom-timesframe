@@ -1,0 +1,25 @@
+send_danmaku:
+  name: Send danmaku
+  description: Send scrolling text to a Divoom TimesFrame screen.
+  fields:
+    device_id:
+      name: Device ID
+      description: The TimesFrame device ID shown on the device-info sensor.
+      required: true
+      example: "<DEVICE_ID>"
+      selector:
+        text:
+    message:
+      name: Message
+      description: Text to scroll across the screen.
+      required: true
+      example: Hello from Home Assistant!
+      selector:
+        text:
+    color:
+      name: Text color
+      description: Hex color for the text.
+      default: "#FFFFFF"
+      example: "#FF0000"
+      selector:
+        text:
