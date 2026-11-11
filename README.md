@@ -1,4 +1,4 @@
-# Divoom TimesFrame Local API
+# Divoom TimesFrame Home Assistant integration and Local API
 
 This repository documents and implements the local REST API of the **Divoom TimesFrame** smart frame.
 
@@ -7,6 +7,35 @@ It contains:
 - `ENDPOINTS.md` – full endpoint reference reverse-engineered from the Divoom Android APK
 - `app/` – a FastAPI web UI to browse and test every command against a device
 - `custom_components/divoom_timesframe/` – a Home Assistant custom integration
+
+## Home Assistant integration
+
+Add this repository as a custom source in HA marketplace (formerly HACS).
+
+After installing quickly restart Home Assistant and find the integration in the marketplace view. 
+You can now run the setup and add devices on your LAN. You need to have the divoom timesframe configured
+in the divoom App beforehand, that means you will also need to have an account. Maybe some day someone goes
+all the way and untethers this cute little infoscreen from the cloud.
+
+You can either scan the local network for frames or add a device by IP address.
+
+### Exposed entities per device
+
+- **Switch** – screen on/off
+- **Number** – brightness (0-100)
+- **Select** – clock face (loaded from Divoom cloud)
+- **Sensor** – device info + current clock ID
+- **Button** – reboot
+
+### Service
+
+```yaml
+service: divoom_timesframe.send_danmaku
+data:
+  device_id: <DEVICE_ID>
+  message: "Hello from Home Assistant!"
+  color: "#FF0000"
+```
 
 ## Base URL
 
@@ -31,35 +60,6 @@ Open `http://localhost:8000` and set the **Device settings** (IP, port, Device I
 
 Then pick a category and command, edit the JSON payload and send it.
 
-## Home Assistant integration
-
-Copy the integration folder into your Home Assistant configuration:
-
-```bash
-cp -r custom_components/divoom_timesframe /path/to/ha/config/custom_components/
-```
-
-Restart Home Assistant and add **Divoom TimesFrame** from **Settings → Devices & services → Add integration**.
-
-You can either scan the local network for frames or add a device by IP address.
-
-### Exposed entities per device
-
-- **Switch** – screen on/off
-- **Number** – brightness (0-100)
-- **Select** – clock face (loaded from Divoom cloud)
-- **Sensor** – device info + current clock ID
-- **Button** – reboot
-
-### Service
-
-```yaml
-service: divoom_timesframe.send_danmaku
-data:
-  device_id: <DEVICE_ID>
-  message: "Hello from Home Assistant!"
-  color: "#FF0000"
-```
 
 ## API documentation
 
