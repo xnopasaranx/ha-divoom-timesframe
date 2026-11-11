@@ -6,11 +6,11 @@ It contains:
 
 - `ENDPOINTS.md` – full endpoint reference reverse-engineered from the Divoom Android APK
 - `app/` – a FastAPI web UI to browse and test every command against a device
-- `ha-divoom-timesframe-reversed/custom_components/divoom_timesframe/` – a Home Assistant custom integration
+- `custom_components/divoom_timesframe/` – a Home Assistant custom integration
 
 ## Home Assistant integration
 
-Add this repositorys folder `ha-divoom-timesframe-reversed` as a custom source in HA marketplace (formerly HACS).
+Add this repository as a custom source in HA marketplace (formerly HACS).
 
 After installing quickly restart Home Assistant and find the integration in the marketplace view. 
 You can now run the setup and add devices on your LAN. You need to have the divoom timesframe configured
